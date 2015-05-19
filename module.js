@@ -46,13 +46,14 @@ Screenshot.prototype.resize = function(file, options, callback) {
 				var resWidth = Math.floor(image.bitmap.width * (resHeight / image.bitmap.height));
 
 			try {
-				image.resize(resWidth, resHeight).write(file);
-				if(typeof callback === "function")
-					callback(null, true);
+				image.resize(resWidth, resHeight).write(file, function(error, success) {
+					if(typeof callback === "function")
+						callback(error, (error == null));
+				});
 			}
 			catch(error) {
-				if(typeof callback !== "function")
-					callback(null, error);
+				if(typeof callback === "function")
+					callback(error, null);
 			}
 		});
 	}
@@ -72,7 +73,7 @@ Screenshot.prototype.parseArgs = function(args) {
 					break;
 				case "object":
 					if(args[property] != null)
-					config.options = args[property];
+						config.options = args[property];
 					break;
 			}
 		}

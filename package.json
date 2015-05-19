@@ -1,6 +1,6 @@
 {
   "name": "desktop-screenshot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Cross-platform screenshot module, using external tools",
   "license": "MIT",
   "author": {
