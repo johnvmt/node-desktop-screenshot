@@ -1,0 +1,18 @@
+{
+  "name": "desktop-screenshot",
+  "version": "0.0.1",
+  "description": "Cross-platform screenshot module, using external tools",
+  "license": "MIT",
+  "author": {
+    "name": "John Murphy-Teixidor",
+    "email": "johnvmt@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnvmt/node-desktop-screenshot"
+  },
+  "dependencies": {
+    "jimp": "0.2.x"
+  },
+  "main": "module.js"
+}
