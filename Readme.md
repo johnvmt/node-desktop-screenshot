@@ -5,7 +5,13 @@ Supports Windows (win32) and OSX (darwin) platforms
 
 Windows version uses nircmd (http://nircmd.nirsoft.net)
 
-## How to use ##
+## Available Options ##
+
+- quality: JPEG quality (0 to 100)
+- width: use in conjunction with height, or by itself to maintain aspect ratio
+- height: use in conjunction with width, or by itself to maintain aspect ratio
+
+## Examples ##
 
 ### Full resolution ###
 	var screenshot = require('desktop-screenshot');
@@ -28,11 +34,11 @@ Windows version uses nircmd (http://nircmd.nirsoft.net)
             console.log("Screenshot succeeded");
     });
     
-### Resize to 400x300 ###
+### Resize to 400x300, set JPG quality to 60% ###
 
     var screenshot = require('desktop-screenshot');
 
-    screenshot("screenshot.png", {width: 400, height: 300}, function(error, complete) {
+    screenshot("screenshot.jpg", {width: 400, height: 300, quality: 60}, function(error, complete) {
         if(error)
             console.log("Screenshot failed", error);
         else

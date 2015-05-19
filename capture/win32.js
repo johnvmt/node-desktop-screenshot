@@ -10,7 +10,7 @@ module.exports = function(options, callback) {
 		else {
 			try {
 				fs.statSync(options.output);
-				callback(null, true);
+				callback(null, options); // callback with options, in case options added
 			}
 			catch (error) {
 				callback("file_not_found", null);

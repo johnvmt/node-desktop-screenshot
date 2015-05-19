@@ -4,20 +4,30 @@ module.exports = function() {
 
 var path = require('path');
 var jimp = require('jimp');
+var fs = require('fs');
 
 function Screenshot(args) {
 	var config = this.parseArgs(args);
 	var self = this;
 
 	try {
-		require("./capture/" + process.platform + ".js")(config.options, function(error, success) {
+		require("./capture/" + process.platform + ".js")(config.options, function(error, options) {
 			// TODO add option for string, rather than file
-
 			if(error && typeof config.callback === "function")
-				config.callback(error, success);
-			else if(!error)
-				self.resize(config.options.output, config.options, config.callback);
-
+				config.callback(error, null);
+			else if(!error) {
+				if (typeof options.intermediate === "string") {
+					self.processImage(options.intermediate, options.output, options, function (error, success) {
+						// delete intermediate
+						fs.unlink(options.intermediate, function (error) {
+							if (typeof options.callback === "function")
+								options.callback(error, success);
+						});
+					});
+				}
+				else
+					self.processImage(options.output, options.output, options, options.callback);
+			}
 		});
 	}
 	catch(error) {
@@ -28,13 +38,13 @@ function Screenshot(args) {
 	}
 }
 
-Screenshot.prototype.resize = function(file, options, callback) {
-	if(typeof options.width !== "number" && typeof  options.height !== "number") { // no resize
+Screenshot.prototype.processImage = function(input, output, options, callback) {
+	if(typeof options.width !== "number" && typeof  options.height !== "number" && typeof options.quality !== "number") { // no processing required
 		if(typeof callback === "function")
 			callback(null, true);
 	}
 	else {
-		new jimp(file, function (err, image) {
+		new jimp(input, function (err, image) {
 			if(typeof options.width === "number")
 				var resWidth = Math.floor(options.width);
 			if(typeof options.height === "number")
@@ -46,14 +56,15 @@ Screenshot.prototype.resize = function(file, options, callback) {
 				var resWidth = Math.floor(image.bitmap.width * (resHeight / image.bitmap.height));
 
 			try {
-				image.resize(resWidth, resHeight).write(file, function(error, success) {
-					if(typeof callback === "function")
-						callback(error, (error == null));
-				});
+				image.resize(resWidth, resHeight);
+
+				if(typeof options.quality === "number" && options.quality >= 0 && options.quality <= 100)
+					image.quality(Math.floor(options.quality)); // only works with JPEGs
+
+				image.write(output, callback);
 			}
 			catch(error) {
-				if(typeof callback === "function")
-					callback(error, null);
+				callback(error, null);
 			}
 		});
 	}
