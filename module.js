@@ -18,31 +18,31 @@ function Screenshot(args) {
 			else if(!error) {
 				if (typeof options.intermediate === "string") {
 					self.processImage(options.intermediate, options.output, options, function (error, success) {
-						// delete intermediate
-						fs.unlink(options.intermediate, function (error) {
-							if (typeof options.callback === "function")
-								options.callback(error, success);
-						});
+						fs.unlink(options.intermediate, handleCallback); // delete intermediate
 					});
 				}
 				else
-					self.processImage(options.output, options.output, options, options.callback);
+					self.processImage(options.output, options.output, options, handleCallback);
 			}
 		});
 	}
 	catch(error) {
+		if(typeof error == "object" && typeof error.code === "string" && error.code === "MODULE_NOT_FOUND")
+			handleCallback("unsupported_platform");
+	}
+
+	function handleCallback(error, success) {
 		if(typeof config.callback === "function") {
-			if (typeof error == "object" && typeof error.code === "string" && error.code === "MODULE_NOT_FOUND")
-				config.callback(null, "unsupported_platform");
+			if(typeof success === "undefined")
+				success = !error;
+			config.callback(error, success);
 		}
 	}
 }
 
 Screenshot.prototype.processImage = function(input, output, options, callback) {
-	if(typeof options.width !== "number" && typeof  options.height !== "number" && typeof options.quality !== "number") { // no processing required
-		if(typeof callback === "function")
-			callback(null, true);
-	}
+	if(typeof options.width !== "number" && typeof  options.height !== "number" && typeof options.quality !== "number") // no processing required
+		callback(null);
 	else {
 		new jimp(input, function (err, image) {
 			if(typeof options.width === "number")
@@ -64,7 +64,7 @@ Screenshot.prototype.processImage = function(input, output, options, callback) {
 				image.write(output, callback);
 			}
 			catch(error) {
-				callback(error, null);
+				callback(error);
 			}
 		});
 	}
