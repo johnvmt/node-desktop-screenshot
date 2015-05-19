@@ -1,4 +1,4 @@
-# node-screenshot #
+# node-desktop-screenshot #
 Take a screenshot of the computer on which Node is running, using platform-specific external tools included with the package
 
 Supports Windows (win32) and OSX (darwin) platforms
@@ -8,7 +8,7 @@ Windows version uses nircmd (http://nircmd.nirsoft.net)
 ## How to use ##
 
 ### Full resolution ###
-	var screenshot = require('screenshot');
+	var screenshot = require('desktop-screenshot');
 	
     screenshot("screenshot.png", function(error, complete) {
         if(error)
@@ -19,7 +19,7 @@ Windows version uses nircmd (http://nircmd.nirsoft.net)
     
 ### Resize to 400px wide, maintain aspect ratio ###
 
-    var screenshot = require('screenshot');
+    var screenshot = require('desktop-screenshot');
 
     screenshot("screenshot.png", {width: 400}, function(error, complete) {
         if(error)
@@ -30,7 +30,7 @@ Windows version uses nircmd (http://nircmd.nirsoft.net)
     
 ### Resize to 400x300 ###
 
-    var screenshot = require('screenshot');
+    var screenshot = require('desktop-screenshot');
 
     screenshot("screenshot.png", {width: 400, height: 300}, function(error, complete) {
         if(error)
