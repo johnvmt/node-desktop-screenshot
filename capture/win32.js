@@ -4,17 +4,15 @@ module.exports = function(options, callback) {
 	var childProcess = require('child_process');
 	var path = require('path');
 	
-	childProcess.exec(path.join(__dirname, "bin", "nircmdc.exe") + " savescreenshot " + options.output, function(error, stdout, stderr) {
-		if(stderr)
-			callback(stderr, null);
-		else {
-			try {
-				fs.statSync(options.output);
-				callback(null, options); // callback with options, in case options added
-			}
-			catch (error) {
-				callback("file_not_found", null);
-			}
+	var nircmd = childProcess.spawn(path.join(__dirname, "bin", "nircmd.exe"), ["savescreenshot", options.output]);	
+
+	nircmd.on('close', function(code, signal) {
+		try {
+			fs.statSync(options.output);
+			callback(null, options); // callback with options, in case options added
+		}
+		catch(error) {
+			callback("file_not_found", null);
 		}
 	});
 };
