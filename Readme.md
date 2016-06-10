@@ -1,9 +1,10 @@
 # node-desktop-screenshot #
 Take a screenshot of the computer on which Node is running, using platform-specific external tools included with the package
 
-Supports Windows (win32) and OSX (darwin) platforms
+Supports Windows (win32), OSX (darwin) and Linux platforms
 
 Windows version uses nircmd (http://nircmd.nirsoft.net)
+Linux version uses scrot
 
 ## Available Options ##
 
@@ -48,7 +49,6 @@ Windows version uses nircmd (http://nircmd.nirsoft.net)
 ## TODOs ##
 
 - Tests
-- Linux support
 - Multi-screen support
 - Cropping
 - Return contents of image, rather than writing file
