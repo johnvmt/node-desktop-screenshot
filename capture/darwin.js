@@ -37,7 +37,7 @@ module.exports = function(options, callback) {
 	function capture(output, callback) {
 		var cmd = "screencapture"
 		+ " -t " + path.extname(output).toLowerCase().substring(1) // will create PNG by default
-		+ " -x " + output;
+		+ " -x '" + output + "'";
 
 		childProcess.exec(cmd, function(error, stdout, stderr) {
 			if(error)
