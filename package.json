@@ -12,7 +12,8 @@
     "url": "https://github.com/johnvmt/node-desktop-screenshot"
   },
   "dependencies": {
-    "jimp": "0.2.x"
+    "jimp": "0.2.x",
+    "flavored-path": "0.0.x"
   },
   "main": "module.js"
 }

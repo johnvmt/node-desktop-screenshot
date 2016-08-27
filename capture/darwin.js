@@ -1,9 +1,9 @@
 module.exports = function(options, callback) {
 
-	var path = require('path');
+	var path = require('flavored-path');
 	var fs = require('fs');
 	var childProcess = require('child_process');
-
+	
 	// due to bug in jpgjs processing OSX jpg images https://github.com/notmasteryet/jpgjs/issues/34
 	// when requesting JPG capture as PNG, so JIMP can read it
 	var ext = extension(options.output);
@@ -36,8 +36,8 @@ module.exports = function(options, callback) {
 
 	function capture(output, callback) {
 		var cmd = "screencapture"
-		+ " -t " + path.extname(output).toLowerCase().substring(1) // will create PNG by default
-		+ " -x " + output;
+			+ " -t " + path.extname(output).toLowerCase().substring(1) // will create PNG by default
+			+ " -x " + output.replace(/ /g, '\\ ') + "";
 
 		childProcess.exec(cmd, function(error, stdout, stderr) {
 			if(error)
