@@ -35,22 +35,32 @@ module.exports = function(options, callback) {
 	}
 
 	function capture(output, callback) {
-		var cmd = "screencapture"
-		+ " -t " + path.extname(output).toLowerCase().substring(1) // will create PNG by default
-		+ " -x " + output;
+		var cmd = "screencapture";
+		var args = [
+			// will create PNG by default
+			"-t",
+			path.extname(output).toLowerCase().substring(1),
+			"-x",
+			output
+		];
 
-		childProcess.exec(cmd, function(error, stdout, stderr) {
-			if(error)
-				callback(error, null);
-			else {
-				try {
-					fs.statSync(output);
-					callback(null, true);
-				}
-				catch (error) {
-					callback(error, null);
-				}
+		var captureChild = childProcess.spawn(cmd, args);
+
+		captureChild.on('close', (error) => {
+			if (error) {
+				callback(error);
+			} else {
+				callback();
 			}
+		});
+
+		captureChild.stdout.on('data', (data) => {
+			//console.log(`stdout: ${data}`);
+		});
+
+		captureChild.stderr.on('data', (data) => {
+			console.log(`stderr: ${data}`);
+			callback(data);
 		});
 	}
 };
