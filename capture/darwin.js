@@ -1,5 +1,4 @@
 module.exports = function(options, callback) {
-
 	var path = require('path');
 	var fs = require('fs');
 	var childProcess = require('child_process');
@@ -35,22 +34,26 @@ module.exports = function(options, callback) {
 	}
 
 	function capture(output, callback) {
-		var cmd = "screencapture"
-		+ " -t " + path.extname(output).toLowerCase().substring(1) // will create PNG by default
-		+ " -x " + output;
+		var cmd = "screencapture";
+		var args = [
+			// will create PNG by default
+			"-t",
+			path.extname(output).toLowerCase().substring(1),
+			"-x",
+			output
+		];
 
-		childProcess.exec(cmd, function(error, stdout, stderr) {
-			if(error)
-				callback(error, null);
-			else {
-				try {
-					fs.statSync(output);
-					callback(null, true);
-				}
-				catch (error) {
-					callback(error, null);
-				}
-			}
+		var captureChild = childProcess.spawn(cmd, args);
+
+		captureChild.on('close', function(error) {
+			if (error)
+				callback(error.toString());
+			else
+				callback();
+		});
+
+		captureChild.stderr.on('data', function(data) {
+			callback(data.toString());
 		});
 	}
 };

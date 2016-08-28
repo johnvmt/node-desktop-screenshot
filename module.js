@@ -2,7 +2,7 @@ module.exports = function() {
 	return new Screenshot(arguments);
 };
 
-var path = require('path');
+var path = require('flavored-path');
 var jimp = require('jimp');
 var fs = require('fs');
 
@@ -94,7 +94,7 @@ Screenshot.prototype.parseArgs = function(args) {
 		config.options.output = file;
 
 	if(typeof config.options.output === "string")
-		config.options.output = path.resolve(config.options.output);
+		config.options.output = path.normalize(config.options.output);
 
 	return config;
 };
