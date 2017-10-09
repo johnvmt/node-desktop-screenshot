@@ -4,7 +4,7 @@ module.exports = function(options, callback) {
 	var childProcess = require('child_process');
 	var path = require('path');
 
-	var scrot = childProcess.spawn(path.join(__dirname, "bin", "scrot", "scrot"), [options.output]);
+	var scrot = childProcess.spawn(path.join(__dirname, 'bin', process.arch !== 'arm' ? 'scrot' : 'arm', 'scrot'), [options.output]);
 	scrot.on('close', function(code, signal) {
 		try {
 			fs.statSync(options.output);
