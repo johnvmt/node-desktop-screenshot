@@ -2,7 +2,7 @@ module.exports = function() {
 	return new Screenshot(arguments);
 };
 
-var path = require('flavored-path');
+var path = require('path');
 var jimp = require('jimp');
 var fs = require('fs');
 
