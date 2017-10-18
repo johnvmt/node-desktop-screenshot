@@ -5,13 +5,14 @@ module.exports = function() {
 var path = require('path');
 var jimp = require('jimp');
 var fs = require('fs');
+var capture = require('./capture')
 
 function Screenshot(args) {
 	var config = this.parseArgs(args);
 	var self = this;
 
 	try {
-		require("./capture/" + process.platform + ".js")(config.options, function(error, options) {
+    capture[process.platform](config.options, function(error, options) {
 			// TODO add option for string, rather than file
 			if(error && typeof config.callback === "function")
 				config.callback(error, null);
@@ -88,7 +89,7 @@ Screenshot.prototype.parseArgs = function(args) {
 					config.callback = args[property];
 					break;
 				case "object":
-					if(args[property] != null)
+					if(args[property] !== null)
 						config.options = args[property];
 					break;
 			}
