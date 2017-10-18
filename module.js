@@ -56,7 +56,7 @@ Screenshot.prototype.processImage = function(input, output, options, callback) {
 					image.quality(Math.floor(options.quality)); // only works with JPEGs
 
 				if(options.buffered){
-          image.getBuffer(jimp.MIME_PNG, function(error, buffer) {
+          image.getBuffer(jimp.AUTO, function(error, buffer) {
           	if(error) {
           		callback(error);
 						}
