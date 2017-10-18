@@ -11,19 +11,17 @@ function Screenshot(args) {
 	var config = this.parseArgs(args);
 	var self = this;
 
-	try {
+	if(capture[process.platform]){
     capture[process.platform](config.options, function(error, options) {
-			// TODO add option for string, rather than file
-			if(error && typeof config.callback === "function")
-				config.callback(error, null);
-			else if(!error) {
-				self.processImage(options.output, options.output, options, handleCallback);
-			}
-		});
-	}
-	catch(error) {
-		if(typeof error === "object" && typeof error.code === "string" && error.code === "MODULE_NOT_FOUND")
-			handleCallback("unsupported_platform");
+      // TODO add option for string, rather than file
+      if(error && typeof config.callback === "function")
+        config.callback(error, null);
+      else if(!error) {
+        self.processImage(options.output, options.output, options, handleCallback);
+      }
+    });
+	} else {
+    handleCallback("unsupported_platform");
 	}
 
 	function handleCallback(error, success) {
