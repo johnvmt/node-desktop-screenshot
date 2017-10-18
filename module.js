@@ -21,7 +21,7 @@ function Screenshot(args) {
 		});
 	}
 	catch(error) {
-		if(typeof error == "object" && typeof error.code === "string" && error.code === "MODULE_NOT_FOUND")
+		if(typeof error === "object" && typeof error.code === "string" && error.code === "MODULE_NOT_FOUND")
 			handleCallback("unsupported_platform");
 	}
 
@@ -60,8 +60,8 @@ Screenshot.prototype.processImage = function(input, output, options, callback) {
           	if(error) {
           		callback(error);
 						}
-            fs.unlink(input, function(error) {
-            	callback(error, buffer);
+            fs.unlink(input, function(errorUnlink) {
+            	callback(errorUnlink, buffer);
 						})
 					});
 				} else {
