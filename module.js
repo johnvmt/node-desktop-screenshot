@@ -16,13 +16,7 @@ function Screenshot(args) {
 			if(error && typeof config.callback === "function")
 				config.callback(error, null);
 			else if(!error) {
-				if (typeof options.intermediate === "string") {
-					self.processImage(options.intermediate, options.output, options, function (error, success) {
-						fs.unlink(options.intermediate, handleCallback); // delete intermediate
-					});
-				}
-				else
-					self.processImage(options.output, options.output, options, handleCallback);
+				self.processImage(options.output, options.output, options, handleCallback);
 			}
 		});
 	}
@@ -61,7 +55,18 @@ Screenshot.prototype.processImage = function(input, output, options, callback) {
 				if(typeof options.quality === "number" && options.quality >= 0 && options.quality <= 100)
 					image.quality(Math.floor(options.quality)); // only works with JPEGs
 
-				image.write(output, callback);
+				if(options.buffered){
+          image.getBuffer(jimp.MIME_PNG, function(error, buffer) {
+          	if(error) {
+          		callback(error);
+						}
+            fs.unlink(input, function(error) {
+            	callback(error, buffer);
+						})
+					});
+				} else {
+          image.write(output, callback);
+				}
 			}
 			catch(error) {
 				callback(error);
