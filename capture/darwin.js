@@ -4,7 +4,7 @@ module.exports = function(options, callback) {
 	var childProcess = require('child_process');
 
 	// due to bug in jpgjs processing OSX jpg images https://github.com/notmasteryet/jpgjs/issues/34
-	// when requesting JPG capture as PNG, so JIMP can read it
+	// when requesting JPG capture as PNG, so GIMP can read it
 	var ext = extension(options.output);
 	if(ext === "jpeg" || ext === "jpg") {
 		options.intermediate = path.resolve(path.join(__dirname, uniqueId() + ".png")); // create an intermediate file that can be processed, then deleted
